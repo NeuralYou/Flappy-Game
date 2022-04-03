@@ -4,12 +4,29 @@ using UnityEngine;
 
 public class Flappy : MonoBehaviour
 {
+	NeuralNetwork brain;
+	System.Action deathCallback;
 	[SerializeField] float flapStrength;
+	PipeGeneration generator;
+	bool canRun;
+
+	public void Init(NeuralNetwork brain, System.Action deathCallback)
+	{
+		this.brain = brain;
+		this.brain.SetCallbacks(Flap);
+		this.deathCallback = deathCallback;
+		generator = GameObject.FindGameObjectWithTag("Generator").GetComponent<PipeGeneration>();
+		canRun = true;
+	}
+
 	private void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.Space))
+		if(canRun)
 		{
-			Flap();
+			print("Feeding");
+			Vector2[] poses = generator.GetPipePositions();
+			float[] inputs = new float[] { transform.position.y, poses[0].x, poses[0].y, poses[1].x, poses[1].y };
+			brain?.FeedForward(inputs);
 		}
 	}
 	public void Flap()
@@ -22,6 +39,7 @@ public class Flappy : MonoBehaviour
 	{
 		if(collision.collider.CompareTag("Pipe"))
 		{
+			deathCallback();
 			Destroy(this.gameObject);
 		}
 	}

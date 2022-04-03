@@ -50,7 +50,7 @@ public class TCPClient : MonoBehaviour
 
 	public void InitConnection(NNCallback callback)
 	{
-		TcpClient client = new TcpClient("localhost", 1234);
+		TcpClient client = new TcpClient("127.0.0.1", 1234);
 		if(client.Connected)
 		{
 			NetworkStream stream = client.GetStream();

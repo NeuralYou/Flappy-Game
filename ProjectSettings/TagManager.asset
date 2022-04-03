@@ -6,6 +6,7 @@ TagManager:
   tags:
   - boundry
   - Pipe
+  - Generator
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - Death
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
