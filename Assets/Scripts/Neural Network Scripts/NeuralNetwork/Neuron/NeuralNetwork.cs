@@ -55,7 +55,6 @@ using UnityEngine.Events;
 
 		public void FeedForward(params float[] i_Inputs)
 		{
-			UnityEngine.Debug.Log("feeding!");
 			FeedInput(i_Inputs);
 			FeedInputToHiddens();
 			FeedHiddenToOutput();

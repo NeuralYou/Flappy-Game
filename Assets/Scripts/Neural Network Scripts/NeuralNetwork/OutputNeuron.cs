@@ -23,7 +23,6 @@ public class OutputNeuron
 
 	public void Activate(float i_Threshold)
 	{
-			UnityEngine.Debug.Log("got to callback!");
 		if(currentValue > i_Threshold)
 		{
 			m_Callback();
