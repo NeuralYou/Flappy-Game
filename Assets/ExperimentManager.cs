@@ -1,4 +1,7 @@
-using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -23,10 +26,13 @@ public class ExperimentManager : MonoBehaviour
 
 	private void Update()
 	{
-		//populationFitness += 0.1f;
-		scoring.text = $"Fitness: {populationFitness.ToString("0.0")}\nGeneration: {generationCounter}\n Top Fitness:{maxFitness.ToString("0.0")}";
-
 		GameObject[] birds = GameObject.FindGameObjectsWithTag("Player");
+
+		scoring.text = $"Remaining: {birds.Length}" +
+			$"\nFitness: {populationFitness.ToString("0.0")}" +
+			$"\nGeneration: {generationCounter}" +
+			$"\nTop Fitness:{maxFitness.ToString("0.0")}";
+
 		if(birds.Length == 0)
 		{
 			onFlappyDeath();
@@ -58,8 +64,36 @@ public class ExperimentManager : MonoBehaviour
 		populationFitness = 0;
 		deathCount = 0;
 		generator.ResetGenerator();
+
+		StoreTop5Locally();
 		TCPClient client = GetComponent<TCPClient>();
 		client.SendMultipleNNs(elements,  initPopulation);
+	}
+
+	private void StoreTop5Locally()
+	{
+		List<NeuralNetwork> elems = new List<NeuralNetwork>(elements);
+		elems.Sort();
+		List<NeuralNetwork> list = new List<NeuralNetwork>();
+		for (int i = elems.Count - 6; i < elems.Count; i++)
+		{
+			list.Add(elems[i]);
+		}
+
+		string path = Path.Combine(Application.dataPath);
+		string full = Directory.CreateDirectory(Path.Combine(path, "Top_5s")).FullName;
+
+		int numberOfFolders = Directory.GetDirectories(full).Length;
+		string newPath = Directory.CreateDirectory(Path.Combine(full, numberOfFolders.ToString())).FullName;
+		
+		for(int i = 0; i < list.Count; i++)
+		{
+
+			string fileName = "network_" + i + ".json";
+			string json = Newtonsoft.Json.JsonConvert.SerializeObject(list[0], Newtonsoft.Json.Formatting.Indented);
+			File.WriteAllText(Path.Combine(newPath, fileName), json);
+
+		}
 	}
 
 	private void OnTriggerExit2D(Collider2D collision)
