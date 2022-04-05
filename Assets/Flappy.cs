@@ -32,7 +32,6 @@ public class Flappy : MonoBehaviour
 			Vector2[] poses = generator.GetPipePositions();
 			float[] inputs = new float[] { transform.position.y, poses[0].x, poses[0].y, poses[1].x, poses[1].y };
 			brain?.FeedForward(inputs);
-			//fitness += 0.1f;
 		}
 	}
 	public void Flap()
