@@ -7,6 +7,9 @@ TagManager:
   - boundry
   - Pipe
   - Generator
+  - Checkpoint
+  - Floor
+  - FitnessInspector
   layers:
   - Default
   - TransparentFX

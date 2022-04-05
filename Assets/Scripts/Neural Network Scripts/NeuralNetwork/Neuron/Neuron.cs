@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+[System.Serializable]
 public abstract class Neuron
 {
 	protected float currentValue;

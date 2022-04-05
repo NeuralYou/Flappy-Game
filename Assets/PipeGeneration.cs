@@ -6,15 +6,21 @@ using UnityEngine;
 public class PipeGeneration : MonoBehaviour
 {
 	[SerializeField] GameObject Pipe;
+	[SerializeField] GameObject checkpoint;
 	[SerializeField] float startingX;
 	[SerializeField] int gapSize;
 
 	Vector2[] currentPipesPositions;
+	RandomNumbers random;
 	List<GameObject[]> pairs;
 	[SerializeField] float flappyX;
+	int randomNumberIndex;
+
+	float perlinVariance;
 	private void Start()
 	{
 		pairs = new List<GameObject[]>();
+		random = GetComponent<RandomNumbers>();
 		StartCoroutine(Generate());
 	}
 
@@ -33,13 +39,16 @@ public class PipeGeneration : MonoBehaviour
 
 	public void CreatePair()
 	{
-		float upperHeight = Random.Range(0.4f, 1f) * 4;
+		float upperHeight = random.GetRandomSequence()[(randomNumberIndex++) % 100];
 		GameObject upper = Instantiate(Pipe, new Vector2(startingX, upperHeight), Quaternion.identity);
 		upper.GetComponent<Pipe>().Init(Direction.DOWNWARDS, 20);
 
-		//int currentGapSize = (int) (gapSize * Random.Range(0.8f, 1f));
 		GameObject bottom = Instantiate(Pipe, new Vector2(startingX, upperHeight - gapSize), Quaternion.identity);
 		bottom.GetComponent<Pipe>().Init(Direction.UPWARDS, 20);
+
+		float checkpointY = (upper.transform.position.y + bottom.transform.position.y) / 2f;
+		GameObject checkpointCollider = Instantiate(checkpoint, new Vector2(startingX, checkpointY), Quaternion.identity);
+		//checkpointCollider.transform.SetParent(upper.transform);
 
 		pairs.Add(new GameObject[] { upper, bottom });
 	}
@@ -62,10 +71,23 @@ public class PipeGeneration : MonoBehaviour
 
 	public void ResetGenerator()
 	{
+		randomNumberIndex = 0;
+
+		GameObject[] pipes = GameObject.FindGameObjectsWithTag("Pipe");
+		foreach(GameObject p in pipes)
+		{
+			Destroy(p);
+		}
 		foreach(GameObject[] pair in pairs)
 		{
 			Destroy(pair[0]);
 			Destroy(pair[1]);
+		}
+
+		GameObject[] checkpoints = GameObject.FindGameObjectsWithTag("Checkpoint");
+		foreach(GameObject c in checkpoints)
+		{
+			Destroy(c);
 		}
 		StopAllCoroutines();
 		pairs.Clear();

@@ -44,5 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Pipe: {fileID: 2749227248801846620, guid: d987d3ca76f92544297468fcac965c5e, type: 3}
+  checkpoint: {fileID: 1896392063818552942, guid: a3b68fe98dfe34e45860da52f0598c5b, type: 3}
   startingX: 10
   gapSize: 4
+  flappyX: 0

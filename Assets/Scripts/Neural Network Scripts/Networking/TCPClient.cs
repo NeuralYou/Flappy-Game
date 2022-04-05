@@ -8,7 +8,7 @@ public class TCPClient : MonoBehaviour
 {
 	public void SendMultipleNNs(NeuralNetwork[] elements, NNCallback callback)
 	{
-		TcpClient client = new TcpClient("localhost", 1234);
+		TcpClient client = new TcpClient("127.0.0.1", 1234);
 		if (client.Connected)
 		{
 			NetworkStream stream = client.GetStream();
@@ -16,14 +16,16 @@ public class TCPClient : MonoBehaviour
 			NetworkUtils.WriteInt(stream, 1);
 			NetworkUtils.WriteInt(stream, elements.Length);
 
-			foreach (NeuralNetwork n in elements)
+			for(int i = 0; i < elements.Length; i++)
 			{
-				NetworkUtils.WriteNN(stream, n);
+				NetworkUtils.WriteNN(stream, elements[i]);
+	
 			}
 
 			List<string> stringReps = new List<string>();
 
 			StartCoroutine(GetAnswer(stream, callback));
+
 		}
 	}
 
@@ -44,8 +46,6 @@ public class TCPClient : MonoBehaviour
 		}
 
 		callback(list.ToArray());
-		yield return null;
-
 	}
 
 	public void InitConnection(NNCallback callback)
