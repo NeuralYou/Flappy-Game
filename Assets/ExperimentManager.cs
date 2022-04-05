@@ -46,35 +46,26 @@ public class ExperimentManager : MonoBehaviour
 		foreach(GameObject f in flappys)
 		{
 		}
-		print("Population initialized!");
 	}
 
 	private void onFlappyDeath()
 	{
-		//deathCount++;
-		////print($"deaths: {deathCount}\t out of {elements.Length}");
-		//if(deathCount >= elements.Length)
-		{
+		generationCounter++;
 
-			generationCounter++;
+		if (populationFitness > maxFitness)
+			maxFitness = populationFitness;
 
-			if (populationFitness > maxFitness)
-				maxFitness = populationFitness;
-
-			populationFitness = 0;
-			deathCount = 0;
-			generator.ResetGenerator();
-			TCPClient client = GetComponent<TCPClient>();
-			client.SendMultipleNNs(elements,  initPopulation);
-		}
+		populationFitness = 0;
+		deathCount = 0;
+		generator.ResetGenerator();
+		TCPClient client = GetComponent<TCPClient>();
+		client.SendMultipleNNs(elements,  initPopulation);
 	}
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
-		print("experimnet: collided");
 		if(collision.CompareTag("Checkpoint"))
 		{
-			print("Experiment: triggered");
 			populationFitness += 1;
 		}
 	}
