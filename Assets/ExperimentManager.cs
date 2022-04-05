@@ -7,12 +7,12 @@ using UnityEngine;
 
 public class ExperimentManager : MonoBehaviour
 {
-	NeuralNetwork[] elements;
 	[SerializeField] PipeGeneration generator;
 	[SerializeField] GameObject flappy;
 	[SerializeField] Vector2 startingPosition;
 	[SerializeField] TextMeshProUGUI scoring;
-	[SerializeField] int deathCount;
+
+	NeuralNetwork[] elements;
 	float populationFitness;
 	float maxFitness;
 	int generationCounter;
@@ -27,16 +27,16 @@ public class ExperimentManager : MonoBehaviour
 	private void Update()
 	{
 		GameObject[] birds = GameObject.FindGameObjectsWithTag("Player");
-
-		scoring.text = $"Remaining: {birds.Length}" +
-			$"\nFitness: {populationFitness.ToString("0.0")}" +
-			$"\nGeneration: {generationCounter}" +
-			$"\nTop Fitness:{maxFitness.ToString("0.0")}";
-
 		if(birds.Length == 0)
 		{
 			onFlappyDeath();
 		}
+
+		scoring.text = $"Remaining: {birds.Length}" +
+			$"\nFitness: {populationFitness.ToString("0")}" +
+			$"\nGeneration: {generationCounter}" +
+			$"\nTop Fitness:{maxFitness.ToString("0")}";
+
 	}
 
 	private void initPopulation(NeuralNetwork[] elements)
@@ -44,13 +44,8 @@ public class ExperimentManager : MonoBehaviour
 		this.elements = elements;
 		for (int i = 0; i < elements.Length; i++)
 		{
-
 			GameObject bird = Instantiate(flappy, startingPosition, Quaternion.identity);
-			bird.GetComponent<Flappy>().Init(elements[i], onFlappyDeath);
-		}
-		GameObject[] flappys = GameObject.FindGameObjectsWithTag("Player");
-		foreach(GameObject f in flappys)
-		{
+			bird.GetComponent<Flappy>().Init(elements[i]);
 		}
 	}
 
@@ -62,7 +57,6 @@ public class ExperimentManager : MonoBehaviour
 			maxFitness = populationFitness;
 
 		populationFitness = 0;
-		deathCount = 0;
 		generator.ResetGenerator();
 
 		StoreTop5Locally();
@@ -72,6 +66,9 @@ public class ExperimentManager : MonoBehaviour
 
 	private void StoreTop5Locally()
 	{
+		if (Application.isEditor)
+			return;
+
 		List<NeuralNetwork> elems = new List<NeuralNetwork>(elements);
 		elems.Sort();
 		List<NeuralNetwork> list = new List<NeuralNetwork>();

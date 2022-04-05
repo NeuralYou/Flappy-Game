@@ -4,21 +4,16 @@ using UnityEngine;
 
 public class Flappy : MonoBehaviour
 {
-	static int id = 0;
-	int instanceId;
 	[SerializeField] NeuralNetwork brain;
-	System.Action deathCallback;
 	[SerializeField] float flapStrength;
 	PipeGeneration generator;
 	bool canRun;
 	public float fitness;
 
-	public void Init(NeuralNetwork brain, System.Action deathCallback)
+	public void Init(NeuralNetwork brain)
 	{
-		instanceId = id++;
 		this.brain = brain;
 		this.brain.SetCallbacks(Flap);
-		this.deathCallback = deathCallback;
 		generator = GameObject.FindGameObjectWithTag("Generator").GetComponent<PipeGeneration>();
 		canRun = true;
 	}

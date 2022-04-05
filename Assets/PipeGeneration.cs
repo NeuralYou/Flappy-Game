@@ -10,13 +10,11 @@ public class PipeGeneration : MonoBehaviour
 	[SerializeField] float startingX;
 	[SerializeField] int gapSize;
 
-	Vector2[] currentPipesPositions;
 	RandomNumbers random;
 	List<GameObject[]> pairs;
 	[SerializeField] float flappyX;
 	int randomNumberIndex;
 
-	float perlinVariance;
 	private void Start()
 	{
 		pairs = new List<GameObject[]>();
@@ -48,7 +46,6 @@ public class PipeGeneration : MonoBehaviour
 
 		float checkpointY = (upper.transform.position.y + bottom.transform.position.y) / 2f;
 		GameObject checkpointCollider = Instantiate(checkpoint, new Vector2(startingX, checkpointY), Quaternion.identity);
-		//checkpointCollider.transform.SetParent(upper.transform);
 
 		pairs.Add(new GameObject[] { upper, bottom });
 	}
@@ -58,9 +55,8 @@ public class PipeGeneration : MonoBehaviour
 		while(true)
 		{
 			CreatePair();
-			yield return new WaitForSeconds(4f);
+			yield return new WaitForSeconds(3f);
 		}
-
 	}
 
 	public Vector2[] GetPipePositions()
@@ -89,6 +85,7 @@ public class PipeGeneration : MonoBehaviour
 		{
 			Destroy(c);
 		}
+
 		StopAllCoroutines();
 		pairs.Clear();
 		StartCoroutine(Generate());

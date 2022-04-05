@@ -754,7 +754,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Fitness:
+  m_text: 'Remaining:
+
+    Fitness:
 
     Generation:
 

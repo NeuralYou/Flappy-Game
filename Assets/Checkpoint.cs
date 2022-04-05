@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-
+	[SerializeField] float speed;
 	public void Update()
 	{
-		transform.position += (Vector3)Vector2.left * 2 * Time.deltaTime;
+		transform.position += (Vector3)Vector2.left * speed * Time.deltaTime;
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
