@@ -11,12 +11,13 @@ using UnityEngine.Events;
 		[JsonProperty] public InputNeuron[] inputs;
 		[JsonProperty] public HiddenNeuron[] hidden;
 		[JsonProperty] public OutputNeuron[] outputs;
-		float networkThershold;
+		float networkThreshold;
 		public float Fitness { get; set; }
 
 
 		public NeuralNetwork(int i_NumberOfInputs, int i_NumberOfOutputs)
 		{
+			networkThreshold = 0.3f;
 			inputs = new InputNeuron[i_NumberOfInputs];
 			outputs = new OutputNeuron[i_NumberOfOutputs];
 
@@ -79,7 +80,7 @@ using UnityEngine.Events;
 
 			foreach (HiddenNeuron hid in hidden)
 			{
-				hid.Activate(networkThershold);
+				hid.Activate(networkThreshold);
 			}
 		}
 
@@ -93,7 +94,7 @@ using UnityEngine.Events;
 
 			foreach (OutputNeuron output in outputs)
 			{
-				output.Activate(networkThershold);
+				output.Activate(networkThreshold);
 				output.Reset();
 			}
 		}

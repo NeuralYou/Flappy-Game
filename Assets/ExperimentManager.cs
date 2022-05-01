@@ -20,12 +20,24 @@ public class ExperimentManager : MonoBehaviour
 	public void Start()
 	{
 		Application.runInBackground = true;
+		Application.targetFrameRate = 30;
 		TCPClient client = GetComponent<TCPClient>();
 		client.InitConnection(initPopulation);
 	}
 
 	private void Update()
 	{
+
+		if(Input.GetKeyDown(KeyCode.U))
+		{
+			Time.timeScale += 1f;
+		}
+
+		if(Input.GetKeyDown(KeyCode.D))
+		{
+			Time.timeScale -= 1f;
+		}
+
 		GameObject[] birds = GameObject.FindGameObjectsWithTag("Player");
 		if(birds.Length == 0)
 		{
@@ -59,7 +71,7 @@ public class ExperimentManager : MonoBehaviour
 		populationFitness = 0;
 		generator.ResetGenerator();
 
-		StoreTop5Locally();
+		//StoreTop5Locally();
 		TCPClient client = GetComponent<TCPClient>();
 		client.SendMultipleNNs(elements,  initPopulation);
 	}

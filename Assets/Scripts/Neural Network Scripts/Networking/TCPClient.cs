@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -6,12 +7,21 @@ using UnityEngine;
 public delegate void NNCallback(NeuralNetwork[] elements);
 public class TCPClient : MonoBehaviour
 {
+	private string ip;
+
+	private void Awake()
+	{
+		ip = "54.74.9.169";
+		//ip = "127.0.0.1";
+	}
 	public void SendMultipleNNs(NeuralNetwork[] elements, NNCallback callback)
 	{
-		TcpClient client = new TcpClient("127.0.0.1", 1234);
+		TcpClient client = new TcpClient(ip, 1234);
 		if (client.Connected)
 		{
 			NetworkStream stream = client.GetStream();
+		try
+		{
 
 			NetworkUtils.WriteInt(stream, 1);
 			NetworkUtils.WriteInt(stream, elements.Length);
@@ -27,11 +37,15 @@ public class TCPClient : MonoBehaviour
 			StartCoroutine(GetAnswer(stream, callback));
 
 		}
+		catch(Exception)
+			{
+				stream.Close();
+			}
+		}
 	}
 
 	public IEnumerator GetAnswer(NetworkStream i_Stream, NNCallback callback)
 	{
-
 		while (!i_Stream.CanRead) { yield return null; }
 
 		List<NeuralNetwork> list = new List<NeuralNetwork>();
@@ -50,7 +64,7 @@ public class TCPClient : MonoBehaviour
 
 	public void InitConnection(NNCallback callback)
 	{
-		TcpClient client = new TcpClient("127.0.0.1", 1234);
+		TcpClient client = new TcpClient(ip, 1234);
 		if(client.Connected)
 		{
 			NetworkStream stream = client.GetStream();

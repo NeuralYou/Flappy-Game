@@ -38,6 +38,7 @@ public class PipeGeneration : MonoBehaviour
 	public void CreatePair()
 	{
 		float upperHeight = random.GetRandomSequence()[(randomNumberIndex++) % 100];
+		//float upperHeight = Random.Range(0.4f, 1) * 5;
 		GameObject upper = Instantiate(Pipe, new Vector2(startingX, upperHeight), Quaternion.identity);
 		upper.GetComponent<Pipe>().Init(Direction.DOWNWARDS, 20);
 
