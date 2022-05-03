@@ -48,15 +48,4 @@ public abstract class Neuron
 			i_NextLayerNeurons[i].RecieveInput(currentValue * outputWeights[i]);
 		}
 	}
-
-	public void Mutate(float i_MutationRate)
-	{
-		for (int i = 0; i < outputWeights.Length; i++)
-		{
-			if (Utils.RandomRange(0, 1f) <= i_MutationRate)
-			{
-				outputWeights[i] += Utils.RandomRange(-3f, 3f);
-			}
-		}
-	}
 }

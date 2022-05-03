@@ -11,8 +11,8 @@ public class TCPClient : MonoBehaviour
 
 	private void Awake()
 	{
-		ip = "54.74.9.169";
-		//ip = "127.0.0.1";
+		//ip = "54.74.9.169";
+		ip = "127.0.0.1";
 	}
 	public void SendMultipleNNs(NeuralNetwork[] elements, NNCallback callback)
 	{
@@ -57,7 +57,10 @@ public class TCPClient : MonoBehaviour
 			int currentSize = NetworkUtils.ReadInt(i_Stream);
 			NeuralNetwork n = NetworkUtils.ReadNN(i_Stream, currentSize);
 			list.Add(n);
+			yield return null;
 		}
+
+		print("Got all networks");
 
 		callback(list.ToArray());
 	}
