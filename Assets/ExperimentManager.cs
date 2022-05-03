@@ -16,17 +16,20 @@ public class ExperimentManager : MonoBehaviour
 	float populationFitness;
 	float maxFitness;
 	int generationCounter;
+	bool experimentRunning;
 
 	public void Start()
 	{
 		Application.runInBackground = true;
-		Application.targetFrameRate = 30;
+		Application.targetFrameRate = 60;
 		TCPClient client = GetComponent<TCPClient>();
 		client.InitConnection(initPopulation);
 	}
 
 	private void Update()
 	{
+		if (!experimentRunning)
+			return; 
 
 		if(Input.GetKeyDown(KeyCode.U))
 		{
@@ -59,10 +62,12 @@ public class ExperimentManager : MonoBehaviour
 			GameObject bird = Instantiate(flappy, startingPosition, Quaternion.identity);
 			bird.GetComponent<Flappy>().Init(elements[i]);
 		}
+		experimentRunning = true;
 	}
 
 	private void onFlappyDeath()
 	{
+		experimentRunning = false;
 		generationCounter++;
 
 		if (populationFitness > maxFitness)
@@ -71,7 +76,6 @@ public class ExperimentManager : MonoBehaviour
 		populationFitness = 0;
 		generator.ResetGenerator();
 
-		//StoreTop5Locally();
 		TCPClient client = GetComponent<TCPClient>();
 		client.SendMultipleNNs(elements,  initPopulation);
 	}
